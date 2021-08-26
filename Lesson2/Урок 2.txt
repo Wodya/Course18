@@ -1,0 +1,276 @@
+1. Какие типы паттернов проектирования существуют?
+    - Порождающие
+    - Поведенческие
+    - структурные
+    - корпоративные
+2. Как можно улучшить Singleton при помощи trait-ов?
+    <?php
+    trait Singleton{
+      private static $instance;
+      public static function getInstance()
+      {
+        if (empty(self::$instance))
+          self::$instance = new static();
+        return self::$instance;
+      }
+
+      public int $count = 0;
+      public function incCount(){
+        $this->count++;
+      }
+      public function printCount(){
+        echo $this->count;
+      }
+    }
+
+    class ClassA
+    {
+        use Singleton;
+    }
+
+    $a = ClassA::getInstance();
+    $a->incCount();
+    $b = ClassA::getInstance();
+
+    $a->printCount();
+    $b->printCount();
+
+3. Как реализуется паттерн Фабричный метод? В чем его отличие от паттерна Фабрика?
+    Фабричный метод:
+    в корневом классе определяется алгоритм, который вызывает абстрактные методы
+    в дочерних реализуются абстрактные методы, различные для каждой из реализаций
+
+        <?php
+        abstract class Product{
+          public function Operation(){
+              echo 'Operation begin' . PHP_EOL;
+              echo $this->getProductString() . PHP_EOL;
+              echo 'Operation end' . PHP_EOL;
+          }
+          abstract protected function getProductString() : string;
+        }
+
+        class ProductA extends Product{
+          protected function getProductString(): string
+          {
+            return "Product A";
+          }
+        }
+
+        class ProductB extends Product{
+          protected function getProductString(): string
+          {
+            return "Product B";
+          }
+        }
+
+        (new ProductA())->Operation();
+        (new ProductB())->Operation();
+    ______________________________
+
+    Абстрактная фабрика реализует создание ряда объектов, необходимых для решения каких-либо задач
+        <?php
+        interface IProductA{
+          function getStringA() : string;
+        }
+        interface IProductB{
+          function getStringB() : string;
+        }
+
+        interface IAbstractFactory{
+            function getProductA() : IProductA;
+            function getProductB() : IProductB;
+        }
+
+        class ProductA1 implements IProductA{
+          function getStringA(): string
+          {
+            return "ProductA1";
+          }
+        }
+
+        class ProductA2 implements IProductA{
+          function getStringA(): string
+          {
+            return "ProductA2";
+          }
+        }
+
+        class ProductB1 implements IProductB{
+          function getStringB(): string
+          {
+            return "ProductB1";
+          }
+        }
+
+        class ProductB2 implements IProductB{
+          function getStringB(): string
+          {
+            return "ProductB2";
+          }
+        }
+
+        class Factory1 implements IAbstractFactory {
+          function getProductA(): IProductA
+          {
+            return new ProductA1();
+          }
+          function getProductB(): IProductB
+          {
+            return new ProductB1();
+          }
+        }
+        class Factory2 implements IAbstractFactory {
+          function getProductA(): IProductA
+          {
+            return new ProductA2();
+          }
+          function getProductB(): IProductB
+          {
+            return new ProductB2();
+          }
+        }
+
+        function CreateProducts(IAbstractFactory $factory){
+          echo $factory->getProductA()->getStringA() . " + " . $factory->getProductB()->getStringB() . PHP_EOL;
+        }
+
+        CreateProducts(new Factory1());
+        CreateProducts(new Factory2());
+
+4. Объясните назначение и применение магических методов __get, __set, __isset, __unset, __call и __callStatic. Когда, как и почему их стоит использовать (или нет)?
+   Методы вызываются при соответствующих операциях на переменными и функциями, которые не объявлены в объекте
+   Используется для динамически определяемых объектов, например для частичной десериализации объектов и досериализации по мере использования данных
+
+    <?php
+    class ExampleMagic{
+      public function __get($name)
+      {
+        echo "__get " . $name . PHP_EOL;
+      }
+      public function __set($name, $value)
+      {
+        echo "__set " . $name . PHP_EOL;
+      }
+      public function __isset($name)
+      {
+        echo "__isset " . $name . PHP_EOL;
+      }
+      public function __unset($name)
+      {
+        echo "__unset " . $name . PHP_EOL;
+      }
+      public function __call(string $name, array $arguments)
+      {
+        echo "__call " . $name . PHP_EOL;
+      }
+      static public function __callStatic(string $name, array $arguments)
+      {
+        echo "__callStatic " . $name . PHP_EOL;
+      }
+    }
+
+    $example =  new ExampleMagic();
+    echo $example->varA;
+    $example->varB = 1;
+    echo isset($example->varC);
+    unset($example->varD);
+    echo $example->FuncA();
+    echo $example::FuncA();
+
+5. Опишите несколько структур данных из стандартной библиотеки PHP (SPL). Приведите примеры использования.
+    SplStack - стек
+    SplQueue - очередь
+    SplPriorityQueue - приоритетная очередь
+
+    <?php
+      $stack = new SplStack();
+      for($i=0;$i<5;$i++)
+        $stack->push($i);
+
+      while($stack->count() > 0)
+        echo $stack->pop() . PHP_EOL;
+    echo PHP_EOL;
+
+    $queue = new SplQueue();
+    for($i=0;$i<5;$i++)
+      $queue->enqueue($i);
+
+    while($queue->count() > 0)
+      echo $queue->dequeue() . PHP_EOL;
+
+    echo PHP_EOL;
+
+    $pQueue = new SplPriorityQueue();
+    for($i=0;$i<5;$i++)
+      $pQueue->insert($i, rand(0,10));
+
+    $pQueue->top();
+
+    while($pQueue->count() > 0)
+      echo $pQueue->extract() . PHP_EOL;
+
+6. Найдите все ошибки в коде:
+
+    interface MyInt {
+        public function funcI();
+        private function funcP();
+    }
+    class A {
+        protected prop1;
+        private prop2;
+
+        function funcA(){
+           return $this->prop2;
+        }
+    }
+    class B extends A {
+        function funcB(){
+           return $this->prop1;
+        }
+    }
+    class C extends B implements MyInt {
+        function funcB(){
+           return $this->prop1;
+        }
+        private function funcP(){
+           return 123;
+        }
+    }
+    $b = new B();
+    $b->funcA();
+    $c = new C();
+    $c->funcI();
+    ___________________
+      interface MyInt {
+        public function funcI();
+        function funcP();
+      }
+      class A {
+        protected $prop1;
+        private $prop2;
+
+        public function funcA(){
+          return $this->prop2;
+        }
+      }
+      class B extends A {
+        function funcB(){
+          return $this->prop1;
+        }
+      }
+      class C extends B implements MyInt {
+        function funcB(){
+          return $this->prop1;
+        }
+        function funcP(){
+          return 123;
+        }
+        public function funcI(){
+          return 123;
+        }
+      }
+      $b = new B();
+      $b->funcA();
+      $c = new C();
+      $c->funcI();
