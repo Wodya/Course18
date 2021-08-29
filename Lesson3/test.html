@@ -1,0 +1,15 @@
+<script>
+  let setNumber = Math.trunc(100*Math.random()) + 1;
+  let num = 0;
+  do
+  {
+    num = +prompt("Введите число");
+    if(num > setNumber)
+      console.log("Число больше");
+    else if(num < setNumber)
+      console.log("Число меньше");
+    else
+      console.log("Число угадано");
+  } while (num !== setNumber);
+</script>
+

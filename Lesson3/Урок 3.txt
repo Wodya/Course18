@@ -1,0 +1,100 @@
+1. Что выведет alert(typeof NaN); ?
+    number
+    Объяснение: Nan - это определённое значение number, которое означает Not a Number
+2. Что выведет alert(NaN === NaN); ?
+    false
+3. 0.1 + 0.2 == 0.3 ?
+    false
+   Объяснение: тип number - тип с фиксированной точкой имеет ограниченную точность. Каждое число представляется сложением двойки в определённой степени.
+   Поэтому некоторые числа невозможно представить точно. Поэтому при сложении могут возникать коллизии.
+4. Какой тип будет иметь переменная a, если она создается при помощи следующего кода:
+    var a = "a,b".split(',');
+        object
+    Объяснение: a - это массив, в JS массив - это объект
+5. Сделать так, чтобы при нажатии на элемент <а> алертом выводилось «Hello world!».
+    document.querySelector("a").onclick = () => alert("Hello World");
+6. Найти все элементы div с классом one, а также все элементы p с классом two. Затем добавить им всем класс three и визуально плавно спустить вниз.
+    let divs = [...document.querySelectorAll(".one"), ...document.querySelectorAll(".two") ]
+    divs.forEach(p => {
+      p.classList.add("three");
+      p.style.marginTop = "30px";
+    });
+7. Выбрать видимый div с именем red, который содержит тег span.
+    console.log(document.querySelector("#red:not(.hidden) span"));
+8. Привести пример замыкания.
+      function makeWorker() {
+        let name = "Pete";
+
+        return function() {
+          console.log(name);
+        };
+      }
+
+      let work = makeWorker();
+      let name = "John";
+      work();
+9. Написать функцию, которая уменьшает или увеличивает указанное время на заданное количество минут, например:
+
+    changeTime('10:00', 1) //return '10:01'
+    changeTime('10:00', -1) //return '09:59'
+    changeTime('23:59', 1) //return '00:00'
+    changeTime('00:00', -1) //return '23:59'
+
+      function changeTime(time, change) {
+        const minuteInDay = 24*60;
+        let [hour , minute] = time.split(":").map(p => +p);
+        let total = (60*hour + minute + change) % minuteInDay;
+        while(total < 0)
+            total += minuteInDay;
+
+        return Math.trunc(total/60).toString().padStart(2,"0") + ":" + (total%60).toString().padStart(2,"0");
+      }
+    console.log(changeTime("10:01", +192));
+    console.log(changeTime("10:01", -192));
+    console.log(changeTime('00:00', -1));
+    console.log(changeTime('23:59', 1));
+
+10. Написать функцию, возвращающую градус, на который указывают часовая и минутная стрелки в зависимости от времени, например:
+
+clock_degree("00:00") returns : "360:360"
+clock_degree("01:01") returns : "30:6"
+clock_degree("00:01") returns : "360:6"
+clock_degree("01:00") returns : "30:360"
+clock_degree("01:30") returns : "30:180"
+clock_degree("24:00") returns : "Check your time !"
+clock_degree("13:60") returns : "Check your time !"
+clock_degree("20:34") returns : "240:204"
+
+  function clock_degree(time) {
+    let [hour , minute] = time.split(":").map(p => +p);
+    if(hour > 23 || minute > 59)
+        return "Неверный формат";
+    hour %= 12;
+    if(hour <= 0)
+      hour = 12;
+    if(minute <= 0)
+      minute = 60;
+    return Math.trunc(hour * 360 / 12) + ":" + Math.trunc(minute * 360 / 60);
+  }
+
+  console.log(clock_degree("00:00"));
+  console.log(clock_degree("01:01"));
+  console.log(clock_degree("00:01"));
+  console.log(clock_degree("01:00"));
+  console.log(clock_degree("01:30"));
+  console.log(clock_degree("24:00"));
+  console.log(clock_degree("13:60"));
+  console.log(clock_degree("20:34"));
+11. Написать простую игру «Угадай число». Программа загадывает случайное число от 0 до 100. Игрок должен вводить предположения и получать ответы «Больше», «Меньше» или «Число угадано».
+  let setNumber = Math.trunc(100*Math.random()) + 1;
+  let num = 0;
+  do
+  {
+    num = +prompt("Введите число");
+    if(num > setNumber)
+      console.log("Число больше");
+    else if(num < setNumber)
+      console.log("Число меньше");
+    else
+      console.log("Число угадано");
+  } while (num !== setNumber);
