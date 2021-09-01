@@ -1,0 +1,34 @@
+1. Как получить в виде результата все поля из таблицы my_table?
+    Create table my_table (id varchar(100), name varchar(100));
+    Select * from my_table;
+
+2. Как получить в виде результата только поля name_first, name_last, salary из таблицы employee?
+    Create table employee (name_first varchar(100), name_last varchar(100), salary decimal, hire_date datetime);
+    Select name_first, name_last, salary from employee;
+
+3. Задать таблице my_table псевдоним t и вывести всех, у кого salary выше 3800.
+    Select * from my_table t where salary > 3800;
+
+4. Так выбрать страны, из которых поставляют продукцию производители, чтобы страны не повторялись по 2 и более раз.
+    Create table supplier_country (supplier varchar(100), country varchar(100));
+    Select distinct country from supplier_country;
+
+5. Вывести все автобусы в порядке уменьшения количества мест.
+    Create table bus (bus_number varchar(100), place_numbers int);
+    Select * from bus order by place_numbers desc;
+
+6. Перечислить известные агрегирующие функции в MySQL.
+    Max, Min, Avg, Count, Sum, Std
+7. Есть таблица с полями name и id. Нужно вывести имя с наибольшим id, не используя при этом команду MAX. Как это можно сделать?
+    Create table t1 (id int, name varchar(100));
+    Insert t1(id, name) values (1, 't1'), (2, 't2');
+    Select name from t1 order by id desc Limit 1;
+
+8. Обязательно ли писать команды прописными буквами? Сработает ли запрос, если его написать строчными буквами?
+    Регистр букв не имеет значение. SQL нечувствителен к регистру букв.
+
+9. Что такое SQL-инъекции и как их избегать?
+    Sql-инъекция - это внедрение вредоносного SQL кода в SQL запрос с целью разбить один запрос на несколько и выполнить запросы, которые
+    первоначально не предполагались разработчиком ПО.
+    Для предотвращения внедрения инъекций необходимо формировать текст SQL-запросов не при помощи обычных строковых переменных, а при помощи
+    специальных классов для формирования SQL-команд.
