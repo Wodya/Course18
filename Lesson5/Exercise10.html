@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .sky{
+        height: 50vh;
+        background: lightblue;
+    }
+    .earth{
+        height: 50vh;
+        background: lightgreen;
+    }
+    .home{
+        position: absolute;
+        left: 20%;
+        top: 40%;
+        width: 200px;
+        height: 200px;
+        background: transparent;
+    }
+    .ceiling_content{
+        background: transparent;
+        height: 50%;
+        width: 100%;
+        overflow: hidden ;
+    }
+    .ceiling{
+        position: relative;
+        top: 40px;
+        background: black;
+        height: 200px;
+        width: 200px;
+        transform: rotate(45deg) ;
+    }
+    .foundation{
+        height: 50%;
+        width: 100%;
+        background: black;
+    }
+    @keyframes cloud_animation {
+        0%{
+            left:0;
+        }
+        50% {
+            left:90%;
+        }
+        100% {
+            left: 0;
+        }
+    }
+    .cloud{
+        height: 100px;
+        position: relative;
+        top: 20%;
+        animation: cloud_animation 10s infinite linear;
+    }
+</style>
+<body>
+    <div class="sky">
+        <img class="cloud" src="Cloud.webp">
+    </div>
+    <div class="earth">
+
+    </div>
+    <div class="home">
+        <div class="ceiling_content">
+            <div class="ceiling"></div>
+        </div>
+        <div class="foundation"></div>
+    </div>
+</body>
+</html>
